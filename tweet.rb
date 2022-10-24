@@ -23,8 +23,6 @@ class Tweet
   end
 
   def job_summary(job)
-    "#{job.title.gsub(/\w+/,
-                      &:capitalize)} at #{job.company_name.gsub(/\w+/,
-                                                                &:capitalize)}. #{job.arrangement.capitalize}, #{job.location.capitalize} (#{job.company_location.capitalize}). #{job.post_link}"
+    "#{job.title.gsub(/\w+/, &:capitalize)} at #{job.company_name.gsub(/\w+/, &:capitalize)}. #{job.arrangement.capitalize}, #{job.location.capitalize} (#{job.company_location.capitalize}). #{job.post_link}"
   end
 end

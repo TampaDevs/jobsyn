@@ -36,9 +36,7 @@ class Slack
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: "*#{job.title.gsub(/\w+/,
-                                     &:capitalize)}* at *#{job.company_name.gsub(/\w+/,
-                                                                                 &:capitalize)}*\n#{job.arrangement.capitalize}\n#{job.location.capitalize} (#{job.company_location.capitalize})"
+            text: "*#{job.title.gsub(/\w+/, &:capitalize)}* at *#{job.company_name.gsub(/\w+/, &:capitalize)}*\n#{job.arrangement.capitalize}\n#{job.location.capitalize} (#{job.company_location.capitalize})"
           },
           accessory: {
             type: 'image',
