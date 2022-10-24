@@ -56,6 +56,9 @@ class Slack
               text: "<#{job.post_link}|Apply Now>"
             }
           ]
+        },
+        {
+          type: 'divider'
         }
       ]
     }
