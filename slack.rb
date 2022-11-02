@@ -18,15 +18,12 @@ class Slack
 
   def payload(job)
     {
-      username: @keys.username,
-      icon_emoji: @keys.icon,
-      channel: @keys.channel,
       blocks: [
         {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: ':star: New post on <https://jobs.tampa.dev|jobs.tampa.dev>:'
+            text: ':zap: New post on <https://jobs.tampa.dev|jobs.tampa.dev>:'
           }
         },
         {
@@ -36,24 +33,20 @@ class Slack
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: "*#{job.title.gsub(/\w+/, &:capitalize)}* at *#{job.company_name.gsub(/\w+/, &:capitalize)}*\n#{job.arrangement.capitalize}\n#{job.location.capitalize} (#{job.company_location.capitalize})"
-          },
-          accessory: {
-            type: 'image',
-            image_url: 'https://www.tampadevs.com/_assets/img/jobs/jobs_square.png',
-            alt_text: 'Company Logo'
+            text: "*#{job.title.gsub(/\w+/, &:capitalize)}* at *#{job.company_name.gsub(/\w+/, &:capitalize)}*\n#{job.arrangement_summary}\n#{job.comp_summary}"
           }
         },
         {
           type: 'context',
           elements: [
             {
-              type: 'mrkdwn',
-              text: ':rocket:'
+              type: 'image',
+              image_url: 'https://www.tampadevs.com/_assets/img/jobs/jobs_square.png',
+              alt_text: 'Tampa Devs Jobs logo'
             },
             {
               type: 'mrkdwn',
-              text: "<#{job.post_link}|Apply Now>"
+              text: "<#{job.post_link_utm(source: 'td_slack', medium: 'organic', campaign: 'td_basic_syndication')}|Apply Now>"
             }
           ]
         },
