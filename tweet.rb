@@ -23,6 +23,6 @@ class Tweet
   end
 
   def job_summary(job)
-    "#{job.title.gsub(/\w+/, &:capitalize)} at #{job.company_name.gsub(/\w+/, &:capitalize)}. #{job.arrangement.capitalize}, #{job.location.capitalize} (#{job.company_location.capitalize}). #{job.post_link}"
+    "#{job.title.gsub(/\w+/, &:capitalize)} at #{job.company_name.gsub(/\w+/, &:capitalize)}\n#{job.arrangement_summary}\n#{job.comp_summary} #{job.post_link_utm(source: 'tw_tampadevjobs', medium: 'social', campaign: 'td_basic_syndication')}"
   end
 end
