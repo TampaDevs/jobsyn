@@ -22,11 +22,13 @@ class BoardSyndicatorTest
     jobs['data'].each do |job|
       syndicate(Job.new(job))
     end
+
+    p @slack.message_json
   end
 
   def syndicate(job)
     p @tweet.job_summary(job)
-    p @slack.payload(job).to_json
+    @slack.syndicate(job)
   end
 end
 

@@ -6,19 +6,20 @@ require 'json'
 require_relative 'slack_keys'
 
 class Slack
-  attr_accessor :keys
+  attr_accessor :keys, :message
 
   def initialize
     @keys = SlackKeys.new
+
+    @message = []
   end
 
   def syndicate(job)
-    post_webhook(payload(job))
+    @message.push(payload(job))
   end
 
   def payload(job)
-    {
-      blocks: [
+    [
         {
           type: 'section',
           text: {
@@ -36,10 +37,9 @@ class Slack
           ]
         }
       ]
-    }
   end
 
-  def post_webhook(payload)
+  def post
     uri = URI.parse(@keys.url)
     https = Net::HTTP.new(uri.host, uri.port)
     https.use_ssl = true
@@ -47,7 +47,9 @@ class Slack
     request = Net::HTTP::Post.new(uri.request_uri)
     request['Accept'] = 'application/json'
     request.content_type = 'application/json'
-    request.body = payload.to_json
+    request.body = {
+      blocks: @message
+    }.to_json
 
     https.request(request)
   end

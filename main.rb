@@ -23,6 +23,8 @@ class BoardSyndicator
     jobs['data'].each do |job|
       syndicate(Job.new(job))
     end
+
+    @slack.post
   end
 
   def syndicate(job)
