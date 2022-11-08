@@ -26,6 +26,7 @@ class BoardSyndicatorTest
 
   def syndicate(job)
     p @tweet.job_summary(job)
+    p @slack.payload(job).to_json
   end
 end
 

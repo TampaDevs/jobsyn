@@ -23,16 +23,6 @@ class Slack
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: ':zap: New post on <https://jobs.tampa.dev|jobs.tampa.dev>:'
-          }
-        },
-        {
-          type: 'divider'
-        },
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
             text: "*#{job.title.gsub(/\w+/, &:capitalize)}* at *#{job.company_name.gsub(/\w+/, &:capitalize)}*\n#{job.arrangement_summary}\n#{job.comp_summary}"
           }
         },
@@ -40,18 +30,10 @@ class Slack
           type: 'context',
           elements: [
             {
-              type: 'image',
-              image_url: 'https://www.tampadevs.com/_assets/img/jobs/jobs_square.png',
-              alt_text: 'Tampa Devs Jobs logo'
-            },
-            {
               type: 'mrkdwn',
-              text: "<#{job.post_link_utm(source: 'td_slack', medium: 'organic', campaign: 'td_basic_syndication')}|Apply Now>"
+              text: "<#{job.post_link_utm(source: 'td_slack', medium: 'organic', campaign: 'td_basic_syndication')}|:rocket: Apply Now>"
             }
           ]
-        },
-        {
-          type: 'divider'
         }
       ]
     }
