@@ -15,7 +15,7 @@ class Slack
   end
 
   def syndicate(job)
-    @message.push(payload(job))
+    @message.concat(payload(job))
   end
 
   def payload(job)
