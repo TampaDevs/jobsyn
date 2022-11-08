@@ -9,33 +9,37 @@ require_relative 'slack'
 require_relative 'tweet'
 
 class BoardSyndicator
-  attr_accessor :db, :slack, :tweet
+  attr_accessor :db, :channels, :dry_run
 
   def initialize
     @db = DB.new('./jobs.sqlite')
-    @slack = Slack.new
-    @tweet = Tweet.new
+    @channels = [Slack.new, Tweet.new]
+
+    @dry_run = true
+    @dry_run = false if ENV["SYN_ENV"] == "production"
   end
 
   def scan
     jobs = JSON.parse(Net::HTTP.get(URI('https://jobs.tampa.dev/jobs.json')))
+    new_posts = []
 
-    jobs['data'].each do |job|
-      syndicate(Job.new(job))
+    jobs["data"].each do |jd|
+      job = Job.new(jd)
+
+      unless dry_run
+        next if @db.job_exist?(job)
+        @db.add_job(job)
+      end 
+
+      puts "Syndicating: #{job.title} \##{job.id}"
+
+      new_posts.push(job)
+    end 
+
+    @channels.each do |chan|
+      chan.syndicate(new_posts, dry_run: @dry_run)
+      puts "Channel exec: #{chan.class.name}"
     end
-
-    @slack.post
-  end
-
-  def syndicate(job)
-    return if @db.job_exist?(job)
-
-    @slack.syndicate(job)
-    @tweet.syndicate(job)
-
-    puts "Syndicated: #{job.title} \##{job.id}"
-
-    @db.add_job(job)
   end
 end
 

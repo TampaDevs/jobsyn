@@ -2,7 +2,7 @@
 
 class Job
   attr_accessor :application_email, :application_url, :arrangement, :company_location, :company_logo, :company_name,
-                :expires_at, :location, :published_at, :salary_max, :salary_min, :salary_schedule, :title, :attribute_type, :id, :post_link, :post_type
+                :expires_at, :location, :published_at, :salary_max, :salary_min, :salary_schedule, :title, :type, :id, :post_link, :post_type
 
   def initialize(post_json)
     @arrangement = post_json['attributes']['arrangement']
@@ -40,21 +40,24 @@ class Job
   end
 
   def title_summary
-    "#{@title.gsub(/\w+/, &:capitalize)} at #{@company_name.gsub(/\w+/, &:capitalize)}"
+    "#{@title.gsub(/\w+/, &:capitalize)} at #{@company_name}"
   end
 
   def arrangement_summary
-    "#{@arrangement.capitalize}, #{@location.capitalize} (#{company_location.capitalize})"
+    arrangement = "#{@arrangement.capitalize}"
+    arrangement += ", #{@location.capitalize} " unless @location.capitalize.empty?
+    arrangement += "(#{company_location.gsub(/\w+/, &:capitalize)})" unless @company_location.empty?
+    arrangement
   end
 
   def comp_summary
-    return "$#{@salary_min}-$#{@salary_max} #{@salary_currency}/#{@salary_schedule}" unless @salary_currency.empty?
+    return "$#{@salary_min}-$#{@salary_max} #{@salary_currency} #{@salary_schedule.capitalize}" unless @salary_currency.empty?
 
     ""
   end
 
-  def post_link_utm(source: '', medium: '', campaign: '')
-    uri = URI(@post_link)
+  def link_utm(url, source: '', medium: '', campaign: '')
+    uri = URI(url)
     
     params = URI.decode_www_form(uri.query || "") << ["utm_source", source]
     params << ["utm_medium", medium]

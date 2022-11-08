@@ -4,10 +4,18 @@ require 'twitter'
 require_relative 'twitter_keys'
 
 class Tweet
-  attr_accessor :client, :keys
+  attr_accessor :client, :keys, :post_types, :utm_params
 
   def initialize
     @keys = TwitterKeys.new
+
+    @post_types = ["basic", "promoted", "featured"]
+
+    @utm_params = {
+      source: 'tw_tampadevjobs',
+      medium: 'social',
+      campaign: 'tampadevs_job_board'
+    }
 
     @client = Twitter::REST::Client.new do |config|
       config.consumer_key        = @keys.api_key
@@ -17,12 +25,17 @@ class Tweet
     end
   end
 
-  def syndicate(job)
-    p
-    @client.update(job_summary(job))
+  def syndicate(jobs, dry_run: true)
+    return if jobs.empty?
+
+    jobs.each do |job|
+      next unless @post_types.include? job.type
+      @client.update(payload(job)) unless dry_run
+      puts payload(job) if dry_run
+    end
   end
 
-  def job_summary(job)
-    "#{job.title.gsub(/\w+/, &:capitalize)} at #{job.company_name.gsub(/\w+/, &:capitalize)}\n#{job.arrangement_summary}\n#{job.comp_summary} #{job.post_link_utm(source: 'tw_tampadevjobs', medium: 'social', campaign: 'td_basic_syndication')}"
+  def payload(job)
+    "#{job.title_summary}\n#{job.arrangement_summary}\n#{job.comp_summary} #{job.link_utm(job.post_link, **@utm_params)}"
   end
 end
