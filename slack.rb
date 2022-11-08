@@ -40,6 +40,8 @@ class Slack
   end
 
   def post
+    return if @message.length == 0
+
     uri = URI.parse(@keys.url)
     https = Net::HTTP.new(uri.host, uri.port)
     https.use_ssl = true
