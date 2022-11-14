@@ -51,7 +51,7 @@ class Job
   end
 
   def comp_summary
-    return "$#{@salary_min}-$#{@salary_max} #{@salary_currency} #{@salary_schedule.capitalize}" unless @salary_currency.empty?
+    return "$#{@salary_min.truncate.to_s.reverse.scan(/.{1,3}/).join(',').reverse}-$#{@salary_max.truncate.to_s.reverse.scan(/.{1,3}/).join(',').reverse} #{@salary_currency} #{@salary_schedule.capitalize}" unless @salary_currency.empty?
 
     ""
   end

@@ -35,10 +35,7 @@ class Slack
   end
 
   def payload(job)
-    job_links = ""
-    job_links += "<#{job.link_utm(job.application_url, **@utm_params)}|:rocket: Apply Now>" unless job.application_url.empty?
-    job_links += "<#{job.link_utm(job.post_link, **@utm_params)}|:rocket: Apply Now>" if job.application_url.empty?
-    job_links += " or <#{job.link_utm(job.post_link, **@utm_params)}|See Description>" unless job.post_link.empty?
+    job_links = "<#{job.link_utm(job.post_link, **@utm_params)}|:rocket: Apply Now>"
 
     job_text = "*#{job.title.gsub(/\w+/, &:capitalize)}* at *#{job.company_name}*"
     job_text += "\n#{job.arrangement_summary}" unless job.arrangement_summary.empty?
