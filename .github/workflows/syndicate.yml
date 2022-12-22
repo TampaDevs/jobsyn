@@ -22,9 +22,15 @@ jobs:
 
     - run: bundle install
 
+    - name: "Download jobs DB"
+      uses: actions/download-artifact@v3
+      with:
+        name: jobs-db
+        path: ./jobs.sqlite
+
     - run: bundle exec ruby main.rb
       env:
-        SYN_ENV: test
+        SYN_ENV: production
         TD_SLACK_WEBHOOK: ${{ secrets.TD_SLACK_WEBHOOK }}
         TW_TDJOBS_APIKEY: ${{ secrets.TW_TDJOBS_APIKEY }}
         TW_TDJOBS_APISECRET: ${{ secrets.TW_TDJOBS_APISECRET }}
