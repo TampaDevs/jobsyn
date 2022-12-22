@@ -46,16 +46,24 @@ jobs:
       with:
         script: |
           console.log("Clearing Jobs Cache")
-          try {
-            github.rest.actions.deleteActionsCacheByKey({
+
+            const cache_list = github.rest.actions.getActionsCacheList({
               owner: context.repo.owner,
-              repo: context.repo.repo,
-              key: "jobs-cache",
+              repo: context.repo.repo
             })
-            console.log("Jobs Cache Cleared")
-          } catch (error) {
-            console.log(`Couldn't clear Jobs Cache: ${JSON.stringify(error)}`)
-          }
+
+            for (const cache of cache_list.data.actions_caches) {
+              if(cache.key !== "jobs-cache")
+                continue
+
+              github.rest.actions.deleteActionsCacheByKey({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                key: cache.key
+              })
+              console.log("Cleared Previous Jobs Cache")
+            }
+
 
     - name: Save Jobs DB
       uses: actions/cache/save@v3
