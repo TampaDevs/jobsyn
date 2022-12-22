@@ -49,7 +49,7 @@ jobs:
           github.rest.actions.deleteActionsCacheByKey({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            cache_id: jobs-cache,
+            cache_id: "jobs-cache",
           })
           console.log("Jobs Cache Cleared")
 
