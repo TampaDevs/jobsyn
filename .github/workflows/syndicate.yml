@@ -22,11 +22,12 @@ jobs:
 
     - run: bundle install
 
-    - name: "Download jobs DB"
-      uses: actions/download-artifact@v3
+    - name: Get Cached Jobs DB
+      id: get-cache-jobsdb
+      uses: actions/cache@v3
       with:
-        name: jobs-db
         path: ./jobs.sqlite
+        key: ${{ runner.os }}-jobs
 
     - run: bundle exec ruby main.rb
       env:
@@ -40,9 +41,9 @@ jobs:
         TW_TDJOBS_CLIENTID: ${{ secrets.TW_TDJOBS_CLIENTID }}
         TW_TDJOBS_CLIENTSECRET: ${{ secrets.W_TDJOBS_CLIENTSECRET }}
 
-    - name: "Upload jobs DB"
-      uses: actions/upload-artifact@v3
+    - name: Save Cached Jobs DB
+      uses: actions/cache/save@v3
+      id: save-cache-jobsdb
       with:
-        name: jobs-db
         path: ./jobs.sqlite
-        if-no-files-found: error
+        key: ${{ runner.os }}-jobs
