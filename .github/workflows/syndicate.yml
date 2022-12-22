@@ -27,7 +27,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ./jobs.sqlite
-        key: ${{ runner.os }}-jobs
+        key: jobs-cache
 
     - run: bundle exec ruby main.rb
       env:
@@ -39,11 +39,23 @@ jobs:
         TW_TDJOBS_ACTOKEN: ${{ secrets.TW_TDJOBS_ACTOKEN }}
         TW_TDJOBS_ACSECRET: ${{ secrets.TW_TDJOBS_ACSECRET }}
         TW_TDJOBS_CLIENTID: ${{ secrets.TW_TDJOBS_CLIENTID }}
-        TW_TDJOBS_CLIENTSECRET: ${{ secrets.W_TDJOBS_CLIENTSECRET }}
+        TW_TDJOBS_CLIENTSECRET: ${{ secrets.TW_TDJOBS_CLIENTSECRET }}
 
-    - name: Save Cached Jobs DB
+    - name: Clear Jobs DB Cache
+      uses: actions/github-script@v6
+      with:
+        script: |
+          console.log("Clearing Jobs Cache")
+          github.rest.actions.deleteActionsCacheByKey({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            cache_id: jobs-cache,
+          })
+          console.log("Jobs Cache Cleared")
+
+    - name: Save Jobs DB
       uses: actions/cache/save@v3
       id: save-cache-jobsdb
       with:
         path: ./jobs.sqlite
-        key: ${{ runner.os }}-jobs
+        key: jobs-cache
