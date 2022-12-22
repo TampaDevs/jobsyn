@@ -16,12 +16,6 @@ jobs:
     - name: "Check out repository"
       uses: actions/checkout@v3
 
-    - name: "Download jobs DB"
-      uses: actions/download-artifact@v3
-      with:
-        name: jobs-db
-        path: ./jobs.sqlite
-
     - uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
