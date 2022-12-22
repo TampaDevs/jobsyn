@@ -22,12 +22,6 @@ jobs:
 
     - run: bundle install
 
-    - name: "Download jobs DB"
-      uses: actions/download-artifact@v3
-      with:
-        name: jobs-db
-        path: ./jobs.sqlite
-
     - run: bundle exec ruby main.rb
       env:
         SYN_ENV: production
