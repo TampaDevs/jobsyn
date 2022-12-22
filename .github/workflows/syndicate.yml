@@ -22,7 +22,7 @@ jobs:
 
     - run: bundle install
 
-    - run: ruby main.rb
+    - run: bundle exec ruby main.rb
       env:
         SYN_ENV: test
         TD_SLACK_WEBHOOK: ${{ secrets.TD_SLACK_WEBHOOK }}
