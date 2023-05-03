@@ -13,7 +13,7 @@ class BoardSyndicator
 
   def initialize
     @db = DB.new('./jobs.sqlite')
-    @channels = [Slack.new, Tweet.new]
+    @channels = [Slack.new]
 
     @dry_run = true
     @dry_run = false if ENV["SYN_ENV"] == "production"
